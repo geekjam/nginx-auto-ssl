@@ -1,7 +1,5 @@
 #!/bin/bash
 
-adduser -D -H -u 1000 -s /bin/bash www-data -G www-data
-
 RESTY_CONF_DIR="/usr/local/openresty/nginx/conf"
 NGINX_CONF_DIR="/etc/nginx/conf.d"
 
@@ -39,11 +37,11 @@ if [ -n "$SITES" ]; then
     export SERVER_ENDPOINT=${RAW_SERVER_ENDPOINT#*//}  # it clears url scheme, like http:// or https://
     if [ ! -f "${NGINX_CONF_DIR}/${SERVER_NAME}.conf" ]; then
 		if [ "$SERVER_ENDPOINT" == "_" ]; then
-			su www-data -c envsubst '$SERVER_NAME $SERVER_ENDPOINT' \
+			envsubst '$SERVER_NAME $SERVER_ENDPOINT' \
 			< ${RESTY_CONF_DIR}/server-template.conf \
 			> ${NGINX_CONF_DIR}/${SERVER_NAME}.conf
 		else
-			su www-data -c envsubst '$SERVER_NAME $SERVER_ENDPOINT' \
+			envsubst '$SERVER_NAME $SERVER_ENDPOINT' \
 			< ${RESTY_CONF_DIR}/server-proxy.conf.conf \
 			> ${NGINX_CONF_DIR}/${SERVER_NAME}.conf
 		fi
@@ -55,7 +53,7 @@ if [ -n "$SITES" ]; then
 # if $SITES isn't defined, let's check if $NGINX_CONF_DIR is empty
 elif [ ! "$(ls -A ${NGINX_CONF_DIR})" ]; then
   # if yes, just copy default server (similar to default from docker-openresty, but using https)
-  su www-data -c cp ${RESTY_CONF_DIR}/server-default.conf ${NGINX_CONF_DIR}/default.conf
+  cp ${RESTY_CONF_DIR}/server-default.conf ${NGINX_CONF_DIR}/default.conf
 fi
 
 

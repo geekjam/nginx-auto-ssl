@@ -30,6 +30,8 @@ RUN apk --no-cache add bash openssl \
 COPY nginx.conf snippets /usr/local/openresty/nginx/conf/
 COPY entrypoint.sh /entrypoint.sh
 RUN ["chmod", "+x", "/entrypoint.sh"]
+RUN adduser -D -H -u 1000 -s /bin/bash www-data -G www-data
 VOLUME /etc/resty-auto-ssl
+USER www-data
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["/usr/local/openresty/bin/openresty", "-g", "daemon off;"]
