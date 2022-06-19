@@ -29,7 +29,7 @@ RUN apk --no-cache add bash openssl \
 
 COPY nginx.conf snippets /usr/local/openresty/nginx/conf/
 COPY entrypoint.sh /entrypoint.sh
-RUN chmod 777 /etc/resty-auto-ssl
+RUN mkdir /etc/resty-auto-ssl && chmod 777 -R /etc/resty-auto-ssl
 RUN chmod 777 -R /usr/local/openresty/nginx/conf
 RUN ["chmod", "+x", "/entrypoint.sh"]
 RUN adduser -D -H -u 1000 -s /bin/bash www-data -G www-data
