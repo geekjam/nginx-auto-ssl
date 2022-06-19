@@ -29,8 +29,7 @@ RUN apk --no-cache add bash openssl \
 
 COPY nginx.conf snippets /usr/local/openresty/nginx/conf/
 COPY entrypoint.sh /entrypoint.sh
-
+RUN ["chmod", "+x", "/entrypoint.sh"]
 VOLUME /etc/resty-auto-ssl
-
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["/usr/local/openresty/bin/openresty", "-g", "daemon off;"]
