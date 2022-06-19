@@ -1,5 +1,7 @@
 #!/bin/bash
 
+RUN adduser -D -H -u 1000 -s /bin/bash www-data
+
 RESTY_CONF_DIR="/usr/local/openresty/nginx/conf"
 NGINX_CONF_DIR="/etc/nginx/conf.d"
 
@@ -25,6 +27,8 @@ fi
 #
 # 1. /etc/nginx/conf.d/db.example.com.conf using $SERVER_ENDPOINT=localhost:5432 and $SERVER_NAME=db.example.com
 # 2. /etc/nginx/conf.d/app.example.com.conf using $SERVER_ENDPOINT=localhost:8080 and $SERVER_NAME=app.example.com
+
+USER www-data
 
 if [ -n "$SITES" ]; then
   # lets read all backends, separated by ';'
