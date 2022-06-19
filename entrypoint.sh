@@ -26,6 +26,7 @@ fi
 # 1. /etc/nginx/conf.d/db.example.com.conf using $SERVER_ENDPOINT=localhost:5432 and $SERVER_NAME=db.example.com
 # 2. /etc/nginx/conf.d/app.example.com.conf using $SERVER_ENDPOINT=localhost:8080 and $SERVER_NAME=app.example.com
 
+su www-data
 if [ -n "$SITES" ]; then
   # lets read all backends, separated by ';'
   IFS=\; read -a SITES_SEPARATED <<<"$SITES"
@@ -49,6 +50,7 @@ if [ -n "$SITES" ]; then
   done
   unset SERVER_NAME SERVER_ENDPOINT
 
+exit
 
 # if $SITES isn't defined, let's check if $NGINX_CONF_DIR is empty
 elif [ ! "$(ls -A ${NGINX_CONF_DIR})" ]; then

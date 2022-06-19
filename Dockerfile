@@ -33,6 +33,6 @@ RUN chmod 7777 -R /usr/local/openresty/nginx/conf
 RUN ["chmod", "+x", "/entrypoint.sh"]
 RUN adduser -D -H -u 1000 -s /bin/bash www-data -G www-data
 VOLUME /etc/resty-auto-ssl
-USER www-data
 ENTRYPOINT ["/entrypoint.sh"]
+USER www-data
 CMD ["/usr/local/openresty/bin/openresty", "-g", "daemon off;"]
