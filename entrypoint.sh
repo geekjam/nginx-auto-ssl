@@ -37,11 +37,11 @@ if [ -n "$SITES" ]; then
     export SERVER_ENDPOINT=${RAW_SERVER_ENDPOINT#*//}  # it clears url scheme, like http:// or https://
     if [ ! -f "${NGINX_CONF_DIR}/${SERVER_NAME}.conf" ]; then
 		if [ "$SERVER_ENDPOINT" == "_" ]; then
-			envsubst '$SERVER_NAME $SERVER_ENDPOINT' \
+			su www-data -c envsubst '$SERVER_NAME $SERVER_ENDPOINT' \
 			< ${RESTY_CONF_DIR}/server-template.conf \
 			> ${NGINX_CONF_DIR}/${SERVER_NAME}.conf
 		else
-			envsubst '$SERVER_NAME $SERVER_ENDPOINT' \
+			su www-data -c envsubst '$SERVER_NAME $SERVER_ENDPOINT' \
 			< ${RESTY_CONF_DIR}/server-proxy.conf.conf \
 			> ${NGINX_CONF_DIR}/${SERVER_NAME}.conf
 		fi
@@ -56,20 +56,11 @@ elif [ ! "$(ls -A ${NGINX_CONF_DIR})" ]; then
 fi
 
 
-if [ "$FORCE_HTTPS" == "true" ]; then
-  # only do this, if it's first run
-  if ! grep -q "force-https.conf" ${RESTY_CONF_DIR}/resty-server-http.conf
-  then
-    echo "include force-https.conf;" >> ${RESTY_CONF_DIR}/resty-server-http.conf
-  fi
-fi
-
-
 # let's substitute $ALLOWED_DOMAINS, $LETSENCRYPT_URL and $RESOLVER_ADDRESS into OpenResty configuration
 envsubst '$ALLOWED_DOMAINS,$LETSENCRYPT_URL,$RESOLVER_ADDRESS,$STORAGE_ADAPTER,$REDIS_HOST,$REDIS_PORT,$REDIS_DB,$REDIS_KEY_PREFIX' \
   < ${RESTY_CONF_DIR}/resty-http.conf \
   > ${RESTY_CONF_DIR}/resty-http.conf.copy \
   && mv ${RESTY_CONF_DIR}/resty-http.conf.copy ${RESTY_CONF_DIR}/resty-http.conf
 
-sh -c "autoreload.sh &"
+sh -c "/autoreload.sh &"
 exec "$@"

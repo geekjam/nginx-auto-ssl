@@ -34,7 +34,8 @@ RUN mkdir /etc/resty-auto-ssl && chmod 777 -R /etc/resty-auto-ssl
 RUN chmod 777 -R /usr/local/openresty/nginx/conf
 RUN chmod 777 -R /etc/ssl/
 RUN ["chmod", "+x", "/entrypoint.sh"]
-#RUN adduser -D -H -u 1000 -s /bin/bash www-data -G www-data
+RUN ["chmod", "+x", "/autoreload.sh"]
+RUN adduser -D -H -u 1000 -s /bin/bash www-data -G www-data
 VOLUME /etc/resty-auto-ssl
 #USER www-data
 ENTRYPOINT ["/entrypoint.sh"]
