@@ -30,8 +30,8 @@ do
             sleep 2
         done
         list_info=$(list)
-    else
-        echo "not change."
+    #else
+    #    echo "conf files not change."
     fi
 
     list_info_new=$(list_date)
@@ -43,7 +43,7 @@ do
             sleep 2
         done
         list_info_date=$(list_date)
-    else
-        echo "not change."
+    #else
+    #    echo "conf files not change.."
     fi
 done
