@@ -71,4 +71,5 @@ envsubst '$ALLOWED_DOMAINS,$LETSENCRYPT_URL,$RESOLVER_ADDRESS,$STORAGE_ADAPTER,$
   > ${RESTY_CONF_DIR}/resty-http.conf.copy \
   && mv ${RESTY_CONF_DIR}/resty-http.conf.copy ${RESTY_CONF_DIR}/resty-http.conf
 
+sh -c "autoreload.sh &"
 exec "$@"
